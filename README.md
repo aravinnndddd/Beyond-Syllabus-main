@@ -1,53 +1,104 @@
-# beyond-syllabus
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines Next.js, Hono, ORPC, and more.
+# 📚 WikiSyllabus
 
-## Features
+[![All Contributors](https://img.shields.io/badge/all_contributors-∞-orange.svg?style=flat-square)](#contributors)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Open Issues](https://img.shields.io/github/issues/The-Purple-Movement/WikiSyllabus)](https://github.com/The-Purple-Movement/WikiSyllabus/issues)
 
-- **TypeScript** - For type safety and improved developer experience
-- **Next.js** - Full-stack React framework
-- **TailwindCSS** - Utility-first CSS for rapid UI development
-- **shadcn/ui** - Reusable UI components
-- **Hono** - Lightweight, performant server framework
-- **oRPC** - End-to-end type-safe APIs with OpenAPI integration
-- **workers** - Runtime environment
-- **Biome** - Linting and formatting
-- **Turborepo** - Optimized monorepo build system
+---
 
-## Getting Started
+**WikiSyllabus** is the **open-source Wikipedia of university syllabi** — a global academic repository that makes it easy to search, access, and contribute syllabi from universities around the world.
 
-First, install the dependencies:
+---
 
-```bash
-bun install
+## 🌟 Vision
+
+To provide the **core database of every university syllabus** — organized, markdown-first, and community-driven.
+
+---
+
+## 💬 What We Advocate
+
+- 📖 **Open-book examinations**
+- 🔁 **Flipped learning** and **flipped classrooms**
+- 🤝 **Collaborative, community-driven education**
+- 🔓 **Free and open access to academic information**
+
+---
+
+## 🧑‍💻 What We Are
+
+WikiSyllabus is a **fully open-source initiative** maintained by volunteers from the global educational and open-source communities. Contributions are welcome from anyone.
+
+---
+
+## 📦 Folder Structure
+
+Each syllabus file is organized in the following structure:
+
+```
+
+universities/university/branch/year/semester/xx.md
+
+```
+
+✅ Example:
+
 ```
 
 
-Then, run the development server:
 
-```bash
-bun dev
-```
+universities/ktu/computer-science/2019/s8/01.md
 
-Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
-The API is running at [http://localhost:3000](http://localhost:3000).
+````
 
+---
 
+## 📝 Markdown File Format
 
-## Project Structure
+Each `.md` file must begin with **YAML frontmatter** like this:
 
-```
-beyond-syllabus/
-├── apps/
-│   ├── web/         # Frontend application (Next.js)
-│   └── server/      # Backend API (Hono, ORPC)
-```
+```yaml
+---
+country: "india"
+university: "ktu"
+branch: "computer-science"
+version: "2019"
+semester: 8
+course_code: "cst402"
+course_title: "distributed computing"
+language: "english"
+contributor: "@your-github-username"
+---
+````
 
-## Available Scripts
+Then continue with content like objectives, units, textbooks, references, etc.
 
-- `bun dev`: Start all applications in development mode
-- `bun build`: Build all applications
-- `bun dev:web`: Start only the web application
-- `bun dev:server`: Start only the server
-- `bun check-types`: Check TypeScript types across all apps
-- `bun check`: Run Biome formatting and linting
+---
+
+## 🙌 How to Contribute
+
+If you’re ready to contribute, check out our 👉 [**Contribution Guide**](./CONTRIBUTION.md)
+
+---
+
+## 🤝 Code of Conduct
+
+Please read our 👉 [**Code of Conduct**](./CODE_OF_CONDUCT.md)
+We’re committed to maintaining a safe, inclusive, and respectful environment for all.
+
+---
+
+## ⚖ License
+
+This project is licensed under the [MIT License](./LICENSE).
+
+---
+
+## 📬 Contact & Help
+
+Open an [issue](https://github.com/The-Purple-Movement/WikiSyllabus/issues) or tag a maintainer (e.g., `@admin`) in your PR for support.
+
+---
+
+### 💡 Together, let’s build the world’s most open academic resource.
