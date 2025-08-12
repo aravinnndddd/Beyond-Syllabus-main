@@ -5,10 +5,19 @@ import { appRouter } from "./lib/route";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { csrf } from "hono/csrf";
+import { prettyJSON } from "hono/pretty-json";
+import { secureHeaders } from "hono/secure-headers";
+import { timing } from "hono/timing";;
 
 const app = new Hono();
 
 app.use(logger());
+app.use("/*", csrf({ origin: env.CORS_ORIGIN || "" }));
+app.use("/*", secureHeaders());
+app.use("/*", timing());
+app.use("/*", prettyJSON());
+
 app.use(
   "/*",
   cors({
@@ -31,9 +40,6 @@ app.use("/rpc/*", async (c, next) => {
   }
   await next();
 });
-
-
-
 
 app.get("/", (c) => {
   return c.text("OK");

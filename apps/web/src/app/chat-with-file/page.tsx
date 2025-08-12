@@ -23,6 +23,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { orpc } from "@/lib/orpc";
+
 
 export default function ChatWithFilePage() {
   const [markdown, setMarkdown] = useState("");
