@@ -1,14 +1,16 @@
-import { env } from "cloudflare:workers";
 import { RPCHandler } from "@orpc/server/fetch";
-import { createContext } from "./lib/context";
-import { appRouter } from "./lib/route";
+import { createContext } from "@/lib/context";
+import { appRouter } from "@/lib/route";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { csrf } from "hono/csrf";
 import { prettyJSON } from "hono/pretty-json";
 import { secureHeaders } from "hono/secure-headers";
-import { timing } from "hono/timing";;
+import { timing } from "hono/timing";
+import { env } from "@/config/env";
+
+import errorHandler from "@/middleware/error.middleware";
 
 const app = new Hono();
 
@@ -26,7 +28,6 @@ app.use(
   })
 );
 
-
 const handler = new RPCHandler(appRouter);
 app.use("/rpc/*", async (c, next) => {
   const context = await createContext({ context: c });
@@ -42,7 +43,13 @@ app.use("/rpc/*", async (c, next) => {
 });
 
 app.get("/", (c) => {
-  return c.text("OK");
+  return c.text("Beyond Syllabus Server is running!");
 });
+
+app.get("/health", (c) => {
+  return c.json({ status: "Healthy", timestamp: new Date().toLocaleString() });
+});
+
+app.onError(errorHandler);
 
 export default app;

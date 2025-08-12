@@ -1,9 +1,9 @@
-import { publicProcedure } from "./orpc";
-import { chatRoutes } from "../routes/chat";
+import { publicProcedure } from "@/lib/orpc";
+import { chatRoutes } from "@/routes/chat";
 
 const appRouter = {
   healthCheck: publicProcedure.handler(() => {
-    return "OK";
+    return "Healthy!";
   }),
 
   chat: chatRoutes,

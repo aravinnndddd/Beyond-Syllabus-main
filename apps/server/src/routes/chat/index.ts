@@ -5,21 +5,21 @@ import {
   ChatWithSyllabusOutputSchema,
   type ChatWithSyllabusInput,
   type ChatWithSyllabusOutput,
-} from "./modules/chat-with-syllabus";
+} from "@/routes/chat/modules/chat-with-syllabus";
 import {
   generateModuleTasks,
   GenerateModuleTasksInputSchema,
   GenerateModuleTasksOutputSchema,
   type GenerateModuleTasksInput,
   type GenerateModuleTasksOutput,
-} from "./modules/generate-module-tasks";
+} from "@/routes/chat/modules/generate-module-tasks";
 import {
   summarizeSyllabus,
   SummarizeSyllabusInputSchema,
   SummarizeSyllabusOutputSchema,
   type SummarizeSyllabusInput,
   type SummarizeSyllabusOutput,
-} from "./modules/summarize-syllabus";
+} from "@/routes/chat/modules/summarize-syllabus";
 
 export const chatRoutes = {
   chatWithSyllabus: publicProcedure
