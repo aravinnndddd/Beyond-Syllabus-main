@@ -51,7 +51,7 @@ Guidelines:
   try {
     const completion = await ai.chat.completions.create({
       messages: [{ role: 'user', content: promptText }],
-      model: 'qwen/qwen3-32b',
+      model: 'llama-3.3-70b-versatile',
       temperature: 0.8,
       max_completion_tokens: 2048,
       top_p: 0.95,

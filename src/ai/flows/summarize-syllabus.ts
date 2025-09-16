@@ -35,7 +35,7 @@ const summarizeSyllabusFlow = async (
 Syllabus Text: ${input.syllabusText}`,
       },
     ],
-    model: 'llama-3.1-8b-instant',
+    model: 'llama-3.3-70b-versatile',
     temperature: 0.9,
     max_completion_tokens: 1024,
     top_p: 0.95,
