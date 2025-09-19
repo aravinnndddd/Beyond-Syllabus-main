@@ -36,11 +36,20 @@ import ErrorDisplay from "@/components/common/ErrorDisplay";
 
 function capitalizeWords(str: string | undefined): string {
   if (!str) return "";
-  return str.replace(/-/g, " ").toUpperCase(); // replace "-" with space and uppercase everything
+  return str.replace(/-/g, " ").toUpperCase();
 }
+
 function formatSemesterName(semesterId: string): string {
   if (!semesterId) return "";
   return `Semester ${semesterId.replace("s", "").replace(/^0+/, "")}`;
+}
+
+// Function to extract numeric value from semester ID for sorting
+function getSemesterNumber(semesterId: string): number {
+  // Remove all non-numeric characters and convert to number
+  const numericPart = semesterId.replace(/[^0-9]/g, '');
+  const num = Number.parseInt(numericPart, 10);
+  return Number.isNaN(num) ? 999 : num; // Put invalid entries at the end
 }
 
 const stepVariants = {
@@ -54,16 +63,10 @@ const MotionDiv = motion.div;
 export function SelectionForm() {
   const router = useRouter();
   const { data: directoryStructure, isFetching, isError, error } = useData();
-  const [selectedUniversityId, setSelectedUniversityId] = useState<
-    string | null
-  >(null);
-  const [selectedProgramId, setSelectedProgramId] = useState<string | null>(
-    null
-  );
+  const [selectedUniversityId, setSelectedUniversityId] = useState<string | null>(null);
+  const [selectedProgramId, setSelectedProgramId] = useState<string | null>(null);
   const [selectedSchemeId, setSelectedSchemeId] = useState<string | null>(null);
-  const [selectedSemesterId, setSelectedSemesterId] = useState<string | null>(
-    null
-  );
+  const [selectedSemesterId, setSelectedSemesterId] = useState<string | null>(null);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
@@ -124,6 +127,7 @@ export function SelectionForm() {
     }
     setStep(level);
   };
+
   if (isFetching) return;
   if (isError)
     return (
@@ -131,6 +135,7 @@ export function SelectionForm() {
         errorMessage={error?.message || "An error occurred while fetching data"}
       />
     );
+
   if (!directoryStructure || Object.keys(directoryStructure).length === 0) {
     return (
       <>
@@ -148,6 +153,7 @@ export function SelectionForm() {
       </>
     );
   }
+
   const selectedUniversityData = selectedUniversityId
     ? directoryStructure[selectedUniversityId]
     : null;
@@ -178,9 +184,8 @@ export function SelectionForm() {
   };
 
   return (
-    <Card className="w-full shadow-2xl rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 backdrop-blur-sm mt-[5vh]">
-      {/* Breadcrumb Navigation */}
-      <div className="flex items-center justify-center flex-wrap gap-2 p-4 border-b border-muted">
+    <Card className="w-full max-w-2xl mx-auto shadow-2xl rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 backdrop-blur-sm mt-[5vh]">
+      <div className="flex items-center justify-center flex-wrap gap-2 p-3 border-b border-muted">
         {stepsConfig.map(({ step: stepNumber, label }, index) => {
           const isActive = step === stepNumber;
           const isCompleted = step > stepNumber;
@@ -191,7 +196,7 @@ export function SelectionForm() {
                 disabled={!isCompleted && !isActive}
                 onClick={() => resetToLevel(stepNumber)}
                 className={cn(
-                  "px-3 py-1 rounded-full text-sm font-medium transition-all",
+                  "px-2 py-1 rounded-full text-xs font-medium transition-all",
                   isActive
                     ? "bg-primary text-white"
                     : isCompleted
@@ -202,7 +207,7 @@ export function SelectionForm() {
                 {label}
               </button>
               {index < stepsConfig.length - 1 && (
-                <span className="mx-2 text-muted-foreground">›</span>
+                <span className="mx-1 text-muted-foreground text-xs">›</span>
               )}
             </div>
           );
@@ -210,16 +215,16 @@ export function SelectionForm() {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <CardHeader>
-          <CardTitle className="text-2xl md:text-3xl text-center font-bold">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl md:text-2xl text-center font-bold">
             Find Your Syllabus
           </CardTitle>
-          <CardDescription className="text-center">
+          <CardDescription className="text-center text-sm">
             Follow the steps to find the curriculum for your course.
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-8  flex items-center justify-center">
+        <CardContent className="space-y-6 flex items-center justify-center min-h-[350px] px-4">
           <AnimatePresence mode="wait">
             {isLoading ? (
               <MotionDiv
@@ -228,23 +233,23 @@ export function SelectionForm() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="w-full text-center space-y-6"
+                className="w-full text-center space-y-4"
               >
                 <div className="relative">
-                  <div className="w-20 h-20 mx-auto mb-6 relative">
-                    <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
-                    <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"></div>
-                    <Loader2 className="w-8 h-8 text-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+                  <div className="w-16 h-16 mx-auto mb-4 relative">
+                    <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"/>
+                    <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"/>
+                    <Loader2 className="w-6 h-6 text-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" />
                   </div>
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                   >
-                    <h3 className="text-xl font-semibold text-primary">
+                    <h3 className="text-lg font-semibold text-primary">
                       {loadingMessage}
                     </h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Please wait while we prepare your content...
                     </p>
                   </motion.div>
@@ -261,38 +266,35 @@ export function SelectionForm() {
                     exit="exit"
                     className="w-full flex items-start justify-center"
                   >
-                    <div className="space-y-6 flex flex-col items-center justify-center rounded-2xl p-6">
-                      <Label className="text-xl font-bold text-center text-purple-900 dark:text-purple-200">
+                    <div className="space-y-4 flex flex-col items-center justify-center rounded-2xl p-4">
+                      <Label className="text-lg font-bold text-center text-purple-900 dark:text-purple-200">
                         1. Select Your University
                       </Label>
 
-                      <Select
-                        onValueChange={(value) => {
-                          handleUniversitySelect(value); // ✅ sets selected university
-                          setStep(2); // ✅ instantly move to next step
-                        }}
-                      >
-                        <SelectTrigger className="w-[320px] py-4 px-4 text-lg font-medium rounded-xl border border-purple-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm hover:border-purple-500 focus:ring-2 focus:ring-purple-500 transition-all">
+                      <Select onValueChange={handleUniversitySelect}>
+                        <SelectTrigger className="w-[280px] py-3 px-3 text-base font-medium rounded-xl border border-purple-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm hover:border-purple-500 focus:ring-2 focus:ring-purple-500 transition-all">
                           <SelectValue placeholder="Choose a university" />
                         </SelectTrigger>
                         <SelectContent
                           position="popper"
                           side="bottom"
-                          sideOffset={8}
+                          align="center"
+                          sideOffset={4}
+                          alignOffset={0}
                           avoidCollisions={false}
-                          className="w-[320px] rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700"
+                          className="w-[280px] rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg z-50 max-h-[200px] overflow-y-auto"
                         >
-                          {Object.keys(directoryStructure).map(
-                            (universityId) => (
+                          {Object.keys(directoryStructure)
+                            .sort((a, b) => capitalizeWords(a).localeCompare(capitalizeWords(b)))
+                            .map((universityId) => (
                               <SelectItem
                                 key={universityId}
                                 value={universityId}
-                                className="capitalize px-3 py-2 text-base hover:bg-purple-100 dark:hover:bg-purple-800 rounded-lg cursor-pointer transition-colors"
+                                className="capitalize px-3 py-2 text-sm hover:bg-purple-100 dark:hover:bg-purple-800 rounded-lg cursor-pointer transition-colors"
                               >
                                 {capitalizeWords(universityId)}
                               </SelectItem>
-                            )
-                          )}
+                            ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -308,8 +310,8 @@ export function SelectionForm() {
                     exit="exit"
                     className="w-full"
                   >
-                    <div className="space-y-6 flex flex-col items-center justify-center rounded-2xl p-6">
-                      <Label className="text-xl font-bold text-center text-purple-900 dark:text-purple-200">
+                    <div className="space-y-4 flex flex-col items-center justify-center rounded-2xl p-4">
+                      <Label className="text-lg font-bold text-center text-purple-900 dark:text-purple-200">
                         2. Choose Your Program
                       </Label>
 
@@ -317,27 +319,29 @@ export function SelectionForm() {
                         onValueChange={handleProgramSelect}
                         value={selectedProgramId ?? ""}
                       >
-                        <SelectTrigger className="w-[320px] py-4 px-4 text-lg font-medium rounded-xl border border-purple-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm hover:border-purple-500 focus:ring-2 focus:ring-purple-500 transition-all">
+                        <SelectTrigger className="w-[280px] py-3 px-3 text-base font-medium rounded-xl border border-purple-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm hover:border-purple-500 focus:ring-2 focus:ring-purple-500 transition-all">
                           <SelectValue placeholder="Select Program" />
                         </SelectTrigger>
                         <SelectContent
                           position="popper"
                           side="bottom"
-                          sideOffset={8}
+                          align="center"
+                          sideOffset={4}
+                          alignOffset={0}
                           avoidCollisions={false}
-                          className="w-[320px] rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 max-h-[300px] overflow-y-auto"
+                          className="w-[280px] rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg z-50 max-h-[200px] overflow-y-auto"
                         >
-                          {Object.keys(selectedUniversityData).map(
-                            (programId) => (
+                          {Object.keys(selectedUniversityData)
+                            .sort((a, b) => capitalizeWords(a).localeCompare(capitalizeWords(b)))
+                            .map((programId) => (
                               <SelectItem
                                 key={programId}
                                 value={programId}
-                                className="capitalize px-3 py-2 text-base hover:bg-purple-100 dark:hover:bg-purple-800 rounded-lg cursor-pointer transition-colors"
+                                className="capitalize px-3 py-2 text-sm hover:bg-purple-100 dark:hover:bg-purple-800 rounded-lg cursor-pointer transition-colors"
                               >
                                 {capitalizeWords(programId)}
                               </SelectItem>
-                            )
-                          )}
+                            ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -353,50 +357,61 @@ export function SelectionForm() {
                     exit="exit"
                     className="w-full"
                   >
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div className="flex items-center gap-2 justify-center">
-                        <Label
-                          htmlFor="scheme"
-                          className="text-lg font-semibold"
-                        >
+                        <Label htmlFor="scheme" className="text-base font-semibold">
                           3. Select Your Scheme
                         </Label>
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Info className="h-4 w-4 text-muted-foreground cursor-pointer" />
+                              <button
+                                type="button"
+                                className="inline-flex items-center justify-center"
+                                aria-label="Scheme information"
+                              >
+                                <Info className="h-3 w-3 text-muted-foreground" />
+                              </button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>
-                                Your syllabus depends on the academic scheme you
-                                follow.
-                              </p>
+                              <p className="text-xs">Your syllabus depends on the academic scheme you follow.</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        {Object.keys(selectedProgramData).map((schemeId) => (
-                          <motion.div
-                            key={schemeId}
-                            whileHover={{ scale: 1.05, y: -3 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <Card
-                              className={cn(
-                                "cursor-pointer border-transparent bg-transparent border-2 border-purple-700 hover:border-purple-500 hover:shadow-lg hover:shadow-purple-500/30 hover:bg-gradient-to-br hover:from-purple-900 hover:to-purple-700 dark:hover:from-purple-800 dark:hover:to-purple-600 transition-all rounded-xl p-6 text-center",
-                                selectedSchemeId === schemeId &&
-                                  "border-primary bg-primary/10"
-                              )}
-                              onClick={() => handleSchemeSelect(schemeId)}
+                      <div className="grid grid-cols-2 gap-3">
+                        {Object.keys(selectedProgramData)
+                          .sort((a, b) => a.localeCompare(b))
+                          .map((schemeId) => (
+                            <motion.div
+                              key={schemeId}
+                              whileHover={{ scale: 1.02, y: -2 }}
+                              whileTap={{ scale: 0.98 }}
                             >
-                              <BookOpen className="h-10 w-10 text-primary mx-auto mb-3" />
-                              <p className="font-semibold capitalize">
-                                {schemeId.replace(/-/g, " ")}
-                              </p>
-                            </Card>
-                          </motion.div>
-                        ))}
+                              <button
+                                type="button"
+                                className={cn(
+                                  "w-full cursor-pointer border-transparent bg-transparent border-2 border-purple-700 hover:border-purple-500 hover:shadow-md hover:shadow-purple-500/30 hover:bg-gradient-to-br hover:from-purple-900 hover:to-purple-700 dark:hover:from-purple-800 dark:hover:to-purple-600 transition-all rounded-lg p-4 text-center focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2",
+                                  selectedSchemeId === schemeId &&
+                                    "border-primary bg-primary/10"
+                                )}
+                                onClick={() => handleSchemeSelect(schemeId)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    handleSchemeSelect(schemeId);
+                                  }
+                                }}
+                                aria-pressed={selectedSchemeId === schemeId}
+                                aria-label={`Select ${schemeId.replace(/-/g, " ")} scheme`}
+                              >
+                                <BookOpen className="h-8 w-8 text-primary mx-auto mb-2" />
+                                <p className="font-semibold capitalize text-sm">
+                                  {schemeId.replace(/-/g, " ")}
+                                </p>
+                              </button>
+                            </motion.div>
+                          ))}
                       </div>
                     </div>
                   </MotionDiv>
@@ -411,42 +426,55 @@ export function SelectionForm() {
                     exit="exit"
                     className="w-full"
                   >
-                    <div className="space-y-4">
-                      <Label className="text-lg font-semibold text-center block">
+                    <div className="space-y-3">
+                      <Label className="text-base font-semibold text-center block">
                         4. Pick Your Semester
                       </Label>
                       <RadioGroup
                         value={selectedSemesterId ?? ""}
-                        className="grid grid-cols-2 gap-4 sm:grid-cols-4"
+                        className="grid grid-cols-2 gap-3 sm:grid-cols-4"
                       >
-                        {Object.keys(selectedSchemeData).map((semesterId) => (
-                          <div
-                            key={semesterId}
-                            onClick={() => {
+                        {Object.keys(selectedSchemeData)
+                          .sort((a, b) => getSemesterNumber(a) - getSemesterNumber(b))
+                          .map((semesterId) => {
+                            const handleSemesterClick = () => {
                               handleSemesterSelect(semesterId);
-                              handleSubmit(
-                                new Event(
-                                  "submit"
-                                ) as unknown as React.FormEvent
-                              );
-                            }}
-                            className={cn(
-                              "flex flex-col items-center justify-center hover:border-primary  cursor-pointer border-2 border-purple-700 hover:border-purple-500 hover:shadow-lg hover:shadow-purple-500/30 hover:bg-gradient-to-br hover:from-purple-900 hover:to-purple-700 dark:hover:from-purple-800 dark:hover:to-purple-600 transition-all rounded-xl p-6 text-center",
-                              selectedSemesterId === semesterId &&
-                                "border-primary bg-primary/10"
-                            )}
-                          >
-                            <RadioGroupItem
-                              value={semesterId}
-                              id={semesterId}
-                              className="sr-only"
-                            />
-                            <BookOpen className="h-6 w-6 mb-2 text-primary" />
-                            <p className="font-semibold">
-                              {formatSemesterName(semesterId)}
-                            </p>
-                          </div>
-                        ))}
+                              handleSubmit(new Event("submit") as unknown as React.FormEvent);
+                            };
+
+                            const handleKeyDown = (e: React.KeyboardEvent) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                handleSemesterClick();
+                              }
+                            };
+
+                            return (
+                              <button
+                                key={semesterId}
+                                type="button"
+                                className={cn(
+                                  "flex flex-col items-center justify-center hover:border-primary cursor-pointer border-2 border-purple-700 hover:border-purple-500 hover:shadow-md hover:shadow-purple-500/30 hover:bg-gradient-to-br hover:from-purple-900 hover:to-purple-700 dark:hover:from-purple-800 dark:hover:to-purple-600 transition-all rounded-lg p-4 text-center focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2",
+                                  selectedSemesterId === semesterId &&
+                                    "border-primary bg-primary/10"
+                                )}
+                                onClick={handleSemesterClick}
+                                onKeyDown={handleKeyDown}
+                                aria-pressed={selectedSemesterId === semesterId}
+                                aria-label={`Select ${formatSemesterName(semesterId)}`}
+                              >
+                                <RadioGroupItem
+                                  value={semesterId}
+                                  id={semesterId}
+                                  className="sr-only"
+                                />
+                                <BookOpen className="h-5 w-5 mb-1 text-primary" />
+                                <p className="font-semibold text-xs">
+                                  {formatSemesterName(semesterId)}
+                                </p>
+                              </button>
+                            );
+                          })}
                       </RadioGroup>
                     </div>
                   </MotionDiv>
@@ -456,15 +484,16 @@ export function SelectionForm() {
           </AnimatePresence>
         </CardContent>
 
-        <CardFooter className="flex justify-between items-center bg-muted/50 p-4 rounded-b-2xl">
+        <CardFooter className="flex justify-between items-center bg-muted/50 p-3 rounded-b-2xl">
           <Button
             variant="ghost"
             type="button"
+            size="sm"
             onClick={() => {
               if (step === 1) {
-                router.push("/"); // go to homepage
+                router.push("/");
               } else {
-                resetToLevel(step - 1); // go to previous step
+                resetToLevel(step - 1);
               }
             }}
           >
