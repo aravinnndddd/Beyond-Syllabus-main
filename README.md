@@ -116,11 +116,9 @@ cd Beyond-Syllabus
 Make sure you have **Node.js (v16+)** and **npm** or **yarn** installed.
 
 ```bash
-# Using npm
-npm install
+# Using bun
+bun install
 
-# Or using yarn
-yarn install
 ```
 
 ## 3. Configure Environment Variables
@@ -128,34 +126,29 @@ yarn install
 Create a `.env` file in the root directory and add the required keys, for example:
 
 ```json
-NEXT_PUBLIC_API_URL=http://localhost:9002
-GEMINI_API_KEY=your_gemini_api_key_here
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+GROQ_API_KEY=your_groq_api_here
 ```
 
-> Replace `your_gemini_api_key_here` with your own OpenAI API key if using the AI features.
+> Replace `your_groq_api_here` with your own Groq API key if using the AI features.
 
 ## 4. Start the Development Server
 
 ```bash
-# Using npm
-npm run dev
+# Using bun
+bun dev
 
-# Or using yarn
-yarn dev
 ```
 
-The app should now be running at [http://localhost:3000](http://localhost:9002).
+The app should now be running at [http://localhost:3001](http://localhost:3001).
 
 ## 5. Build for Production (Optional)
 
 ```bash
-# Using npm
-npm run build
-npm start
+# Using turbo
+turbo build
+turbo dev
 
-# Or using yarn
-yarn build
-yarn start
 ```
 
 ## 📣 Call to Action – Join the Learning Revolution
