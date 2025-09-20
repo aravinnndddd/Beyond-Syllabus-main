@@ -8,21 +8,13 @@ interface Model {
 }
 
 const models: Model[] = [
-  { id: "llama-3.1-8b-instant", name: "LLaMA 3.1 " },
-  { id: "openai/gpt-oss-120b", name: "OpenAI GPT " },
-  { id: "compound-beta", name: "Compound Beta" },
+  { id: "openai/gpt-oss-120b", name: "GPT 5" },
 
-  { id: "llama-3.3-70b-versatile", name: "LLaMA 3.3 " },
+  { id: "openai/gpt-oss-20b", name: "GPT 4.1" },
   {
-    id: "meta-llama/llama-4-maverick-17b-128e-instruct",
-    name: "LLaMA 4 M",
+    id: "meta-llama/llama-3.3-70b-versatile",
+    name: "LLaMA 3",
   },
-  { id: "openai/gpt-oss-20b", name: "OpenAI GPT OSS 20B" },
-  {
-    id: "meta-llama/llama-4-scout-17b-16e-instruct",
-    name: "LLaMA 4 S",
-  },
-  { id: "meta-llama/llama-guard-4-12b", name: "LLaMA G 4" },
 ];
 
 interface ModelSelectorProps {
